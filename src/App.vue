@@ -9,7 +9,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-// import menu from '@/menu.js'
+import menu from '@/menu.js'
 import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
@@ -32,7 +32,10 @@ export default defineComponent({
       .then(data => {
         // console.log(JSON.stringify(data))
         this.menu = data
-      }).catch(error => console.error('Error al obtener los datos:', error))
+      }).catch(error => {
+        console.error('Error al obtener los datos:', error)
+        this.menu = menu
+      })
   },
   created () {
     this.$store.commit('user', {

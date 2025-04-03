@@ -1,5 +1,5 @@
 export default [
-  'General',
+  'Genera2l',
   [
     {
       to: '/',
