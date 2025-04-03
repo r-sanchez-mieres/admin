@@ -9,7 +9,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import menu from '@/menu.js'
+// import menu from '@/menu.js'
 import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
@@ -23,8 +23,16 @@ export default defineComponent({
   },
   data () {
     return {
-      menu
+      menu: []
     }
+  },
+  mounted () {
+    fetch('http://bag-sys.py:8084/api/v1/menu')
+      .then(response => response.json())
+      .then(data => {
+        // console.log(JSON.stringify(data))
+        this.menu = data
+      }).catch(error => console.error('Error al obtener los datos:', error))
   },
   created () {
     this.$store.commit('user', {
