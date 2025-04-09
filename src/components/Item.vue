@@ -1,20 +1,26 @@
 <template>
   <li>
-    <span v-if="typeof element === 'string'">{{ element }} (+)</span>
+    <span
+      v-if="typeof element === 'string'"
+    >
+      {{ element }} <button @click="$store.dispatch('deleteItemMenu', {id: 'element', parentId: 0})">-</button>
+    </span>
     <ul v-else-if="Array.isArray(element)">
       <Item
-        v-for="x in element"
+        v-for="(x,index) in element"
         :key="x.id"
+        :has-child="!!x[index + 1]"
         :element="x"
       />
     </ul>
     <template v-else>
-      <span>{{ element.label }}</span>
-      <span v-if="element.menu && element.menu.length > 0">(+)</span>
-      <ul v-if="element.menu && element.menu.length > 0">
+      <span>{{ element.label }} <button>-</button></span>
+      <span v-if="element.menu.length > 0" />
+      <ul v-if="element.menu.length > 0">
         <Item
-          v-for="x in element.menu"
+          v-for="(x,index) in element.menu"
           :key="x.id || Math.random()"
+          :has-child="!!x[index + 1]"
           :element="x"
         />
       </ul>
@@ -37,6 +43,10 @@ export default defineComponent({
     menus: {
       type: [Array],
       default: () => ([])
+    },
+    hasChild: {
+      type: Boolean,
+      default: null
     }
   },
   data: function () {
@@ -45,3 +55,11 @@ export default defineComponent({
   }
 })
 </script>
+<style scoped>
+  ul.tree {
+    list-style-type: disc;
+  }
+  ul.tree li {
+    margin-left: 50px !important;
+  }
+</style>

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav-bar />
-    <aside-menu :menu="menu" />
+    <aside-menu :menu="menus" />
     <router-view />
     <footer-bar />
   </div>
@@ -9,10 +9,11 @@
 
 <script>
 import { defineComponent } from 'vue'
-import menu from '@/menu.js'
+// import menu from '@/menu.js'
 import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import { mapState } from 'vuex'
 
 export default defineComponent({
   name: 'AppComponent',
@@ -26,16 +27,14 @@ export default defineComponent({
       menu: []
     }
   },
+  computed: {
+    ...mapState(['items']),
+    menus () {
+      return this.items
+    }
+  },
   mounted () {
-    fetch('http://bag-sys.py:8084/api/v1/menu')
-      .then(response => response.json())
-      .then(data => {
-        // console.log(JSON.stringify(data))
-        this.menu = data
-      }).catch(error => {
-        console.error('Error al obtener los datos:', error)
-        this.menu = menu
-      })
+    this.$store.dispatch('getAllItemMenu', {})
   },
   created () {
     this.$store.commit('user', {

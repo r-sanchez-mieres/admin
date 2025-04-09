@@ -22,7 +22,10 @@ const store = new Vuex.Store({
     isAsideMobileExpanded: false,
 
     /* Sample data (commonly used) */
-    clients: []
+    clients: [],
+
+    //
+    items: []
   },
   mutations: {
     /* A fit-them-all commit */
@@ -69,6 +72,9 @@ const store = new Vuex.Store({
       state.isNavBarVisible = !payload
       state.isAsideVisible = !payload
       state.isFooterBarVisible = !payload
+    },
+    fullItems (state, payload) {
+      state.items = payload
     }
   },
   actions: {
@@ -105,6 +111,24 @@ const store = new Vuex.Store({
         })
         .catch(error => {
           alert(error.message)
+        })
+    },
+    deleteItemMenu ({ commit }, payload) {
+      axios
+        .delete(`http://bag-sys.py:8084/api/v1/menu/${payload.parentId}/${payload.id}`)
+        .then(r => {
+          console.log(r.data)
+        }).catch(err => {
+          console.error(err)
+        })
+    },
+    getAllItemMenu ({ commit }, payload) {
+      axios.get('http://bag-sys.py:8084/api/v1/menu')
+        .then(response => {
+          console.log('data', JSON.stringify(response))
+          commit('fullItems', response.data)
+        }).catch(error => {
+          console.error('Error al obtener los datos:', error)
         })
     }
   }
